@@ -115,7 +115,7 @@ def read_package(workout_type: str, data: list) -> Training:
     if workout_type in training_dict.keys():
         return training_dict[workout_type](*data)
     else:
-        return ValueError ('Тип тренировки не найден')
+        return ValueError('Тип тренировки не найден')
 
 
 def main(training: Training) -> None:
