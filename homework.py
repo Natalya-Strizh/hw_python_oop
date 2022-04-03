@@ -89,6 +89,7 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
+
     LEN_STEP: float = 1.38
     COEFF_CALORIE_5: float = 1.1
     COEFF_CALORIE_6: int = 2
@@ -139,6 +140,7 @@ if __name__ == '__main__':
     for workout_type, data in packages:
         training = read_package(workout_type, data)
         main(training)
+
 # Здравствуйте! Спасибо большое за объяснения и статью!
 # У меня только вопрос по поводу констант.
 # В прошлой итерации у меня константы были в дочернем классе.
