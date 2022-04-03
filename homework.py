@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass, asdict
+from typing import List, Dict
 
 
 @dataclass
@@ -27,12 +28,6 @@ class Training:
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     H_IN_MIN: int = 60
-    COEFF_CALORIE_1: int = 18
-    COEFF_CALORIE_2: int = 20
-    COEFF_CALORIE_3: float = 0.035
-    COEFF_CALORIE_4: float = 0.029
-    COEFF_CALORIE_5: float = 1.1
-    COEFF_CALORIE_6: int = 2
 
     def __init__(self,
                  action: int,
@@ -65,6 +60,9 @@ class Training:
 class Running(Training):
     """Тренировка: бег."""
 
+    COEFF_CALORIE_1: int = 18
+    COEFF_CALORIE_2: int = 20
+
     def get_spent_calories(self) -> float:
         return ((self.COEFF_CALORIE_1 * self.get_mean_speed()
                 - self.COEFF_CALORIE_2) * self.weight / self.M_IN_KM
@@ -73,6 +71,9 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
+
+    COEFF_CALORIE_3: float = 0.035
+    COEFF_CALORIE_4: float = 0.029
 
     def __init__(self, action: int, duration: float,
                  weight: float, height: float) -> None:
@@ -89,6 +90,8 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
+    COEFF_CALORIE_5: float = 1.1
+    COEFF_CALORIE_6: int = 2
 
     def __init__(self, action: int, duration: float, weight: float,
                  length_pool: float, count_pool: float) -> None:
@@ -105,9 +108,9 @@ class Swimming(Training):
                 * self.COEFF_CALORIE_6 * self.weight)
 
 
-def read_package(workout_type: str, data: list) -> Training:
+def read_package(workout_type: str, data: List[float]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    training_dict = {
+    training_dict: Dict = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking
@@ -115,7 +118,7 @@ def read_package(workout_type: str, data: list) -> Training:
     if workout_type in training_dict.keys():
         return training_dict[workout_type](*data)
     else:
-        return ValueError('Тип тренировки не найден')
+        raise ValueError('Тип тренировки не найден')
 
 
 def main(training: Training) -> None:
@@ -136,3 +139,10 @@ if __name__ == '__main__':
     for workout_type, data in packages:
         training = read_package(workout_type, data)
         main(training)
+# Здравствуйте! Спасибо большое за объяснения и статью!
+# У меня только вопрос по поводу констант.
+# В прошлой итерации у меня константы были в дочернем классе.
+# Мне необходимо было вынести на уровень класса по аналогии с LEN_STEP.
+# Я сделала вывод что нужно в родительский класс и вынесла.
+# Возможно я Вас неверно поняла. Конечно специфические константы долджны быть каждый в своём классе.
+# Про обработку ошибок и более сложные аннотации записала в свой конспект. Спасибо!
